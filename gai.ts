@@ -16,11 +16,7 @@ module GAI {
 
     export var Debug: boolean = false;
 
-    export var License: string = null;
-
     export var $: JQueryStatic = window.jQuery;
-
-    var SocialEventCount: number = 0;
 
     export interface IOperations {
         sendEvent(category: string, action: string, label: string, value?: any);
@@ -35,12 +31,7 @@ module GAI {
         }
 
         sendSocialEvent(socialNetwork: string, socialAction: string, socialTarget: string) {
-
-            if (License == null && SocialEventCount > 0)
-                return;
-
             Log('Social interaction on ' + socialNetwork + " for " + socialAction + " on " + socialTarget);
-            SocialEventCount++;
             ga('send', 'social', socialNetwork, socialAction, socialTarget);
         }
     }
@@ -53,12 +44,7 @@ module GAI {
         }
 
         sendSocialEvent(socialNetwork: string, socialAction: string, socialTarget: string) {
-
-            if (License == null && SocialEventCount > 0)
-                return;
-
             Log('Social interaction on ' + socialNetwork + " for " + socialAction + " on " + socialTarget);
-            SocialEventCount++;
             _gaq.push(['_trackSocial', 'social', socialNetwork, socialAction, socialTarget]);
         }
     }
@@ -643,8 +629,6 @@ module GAI {
         externalLinkEventAction: string;
         durationEventCategory: string;
         durationEventAction: string;
-
-        license: string;
     }
 
     // The manager class
@@ -670,8 +654,7 @@ module GAI {
                 externalLinkEventCategory: config.externalLinkEventCategory || "Click",
                 externalLinkEventAction: config.externalLinkEventAction || "External Link",
                 durationEventCategory: config.durationEventCategory || "Activity",
-                durationEventAction: config.durationEventAction || "Staying",
-                license: config.license || null
+                durationEventAction: config.durationEventAction || "Staying"
             };
 
             if (this.config.externalLinkTracking == true)
@@ -688,8 +671,6 @@ module GAI {
 
             if (typeof this.config.callback == "function")
                 this.config.callback();
-
-            License = config.license;
 
             this.tick();
 
