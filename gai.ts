@@ -2,6 +2,15 @@
 declare var window: any;
 declare var _gaq: Array;
 declare var YT: any;
+
+if (typeof jQuery == 'undefined')
+    console.log('GAI: jQuery is not loaded!');
+else
+    jQuery(function () {
+        window.gaiManager = new GAI.Manager(window._gaicnf || {});
+    });
+
+
 function _gaiLinkedInSuccessfulShare(d) {
     GAI.Storage.linkedInShares.make();
     GAI.Subscriptions.invokeLinkedInShares();
@@ -16,7 +25,7 @@ module GAI {
 
     export var Debug: boolean = false;
 
-    export var $: JQueryStatic = window.jQuery;
+    export var $: JQueryStatic;
 
     export interface IOperations {
         sendEvent(category: string, action: string, label: string, value?: any);
@@ -67,7 +76,7 @@ module GAI {
     declare var _opsCache: IOperations;
 
     //Get an IOperations object
-    export function Ops() : IOperations {
+    export function Ops(): IOperations {
         if (typeof _opsCache != "undefined")
             return _opsCache;
 
@@ -142,7 +151,7 @@ module GAI {
             new SocialAction(["plus.google.com/share"], "Google+", "Share"),
             new SocialAction(["plus.google.com/"], "Google+", "Click"),
         ];
-            
+
 
         constructor(elem: JQuery) {
             this.elem = elem;
@@ -355,7 +364,7 @@ module GAI {
 
         private trackValues: IScrollTrackerElem[] = [];
 
-        public addTrack(value, label?: string, offset :number = 0) {
+        public addTrack(value, label?: string, offset: number = 0) {
             if (/(\.|#)[a-zA-Z0-9_\-]+/.test(value) == false && /[0-9]+%/.test(value) == false) {
                 window.console.log('The value you want to track is not understood: ' + value);
                 return;
@@ -386,7 +395,7 @@ module GAI {
         //Send Analytics event, also remove the elem from scroll track list
         private sendEvent(elemId: number) {
             var elem = this.trackValues[elemId];
-            
+
             this.trackValues.splice(elemId, 1);
 
             Ops().sendEvent('Interaction', 'Scroll', elem.label);
@@ -489,8 +498,8 @@ module GAI {
 
         private static youtubeStateValue(data: number) {
             if (data == 0) return "End";
-            
-            switch (data){
+
+            switch (data) {
                 case 0:
                     return 'End';
                 case 1:
@@ -643,6 +652,9 @@ module GAI {
         private tickCounter: number = 0;
 
         constructor(config: IConfiguration) {
+
+            $ = window.jQuery;
+
             this.config = {
                 facebookTracking: config.facebookTracking || true,
                 twitterTracking: config.twitterTracking || true,
@@ -706,7 +718,7 @@ module GAI {
         private trackExternalLinks() {
             //Link click event (mouse down actually)
             var linkClickEvent = (elem: JQuery) => {
-                
+
                 elem.one('mousedown', () => {
                     var href = elem.attr('href');
                     href = href.replace(/^http[s]?:\/\//, '');
@@ -721,7 +733,7 @@ module GAI {
                     var eventLabel = elem.attr('data-gai-event-label') || href;
 
                     var socialAnalyzer = new SocialAnalyzer(elem);
-                    
+
                     if (socialAnalyzer.isSocial) {
                         Ops().sendSocialEvent(socialAnalyzer.network, socialAnalyzer.action, socialAnalyzer.target);
                     }
@@ -739,12 +751,12 @@ module GAI {
                 });
             };
 
-            $('a[target="_blank"], a[href^="mailto:"]').each(function() {
+            $('a[target="_blank"], a[href^="mailto:"]').each(function () {
                 var href = $(this).attr('href');
-                
+
                 if (typeof href == "undefined" || href == "" || href == "#" || /^javascript:/.test(href))
                     return;
-                
+
                 //Either an external link, or a mailto link match
                 if (/^https?:\/\//.test(this.href) || this.href.indexOf('mailto:') == 0) {
                     linkClickEvent($(this));
@@ -772,10 +784,3 @@ module GAI {
     }
 
 }
-
-if (typeof jQuery == 'undefined')
-    console.log('GAI: jQuery is not loaded!');
-else
-    jQuery(function () {
-        window.gaiManager = new GAI.Manager(window._gaicnf || {});
-    });
