@@ -5,10 +5,6 @@ declare var YT: any;
 
 if (typeof jQuery == 'undefined')
     console.log('GAI: jQuery is not loaded!');
-else
-    jQuery(function () {
-        window.gaiManager = new GAI.Manager(window._gaicnf || {});
-    });
 
 
 function _gaiLinkedInSuccessfulShare(d) {
@@ -398,7 +394,7 @@ module GAI {
 
             this.trackValues.splice(elemId, 1);
 
-            Ops().sendEvent('Interaction', 'Scroll', elem.label);
+            Ops().sendEvent('GAI', 'Scroll', elem.label);
         }
 
         public tick() {
@@ -489,10 +485,13 @@ module GAI {
             var watchedPercent: number = window.parseInt((100 * currentTime) / duration);
 
             if (e.data == 0) {
-                Ops().sendEvent("Video", "End Watching", url);
+                Ops().sendEvent("GAI", "Video Finished", url);
             }
             else if (e.data == 2 && watchedPercent < 100) {
-                Ops().sendEvent("Video", "Stop", url, watchedPercent);
+                Ops().sendEvent("GAI", "Video Stop", url, watchedPercent);
+            }
+            else if (e.data == 3 && watchedPercent < 100) {
+                Ops().sendEvent("GAI", "Video Start", url);
             }
         }
 
@@ -665,8 +664,8 @@ module GAI {
                 externalLinkTimeout: config.externalLinkTimeout || 500,
                 externalLinkEventCategory: config.externalLinkEventCategory || "Click",
                 externalLinkEventAction: config.externalLinkEventAction || "External Link",
-                durationEventCategory: config.durationEventCategory || "Activity",
-                durationEventAction: config.durationEventAction || "Staying"
+                durationEventCategory: config.durationEventCategory || "GAI",
+                durationEventAction: config.durationEventAction || "Duration"
             };
 
             if (this.config.externalLinkTracking == true)
@@ -784,3 +783,5 @@ module GAI {
     }
 
 }
+
+window.gaiManager = new GAI.Manager(window._gaicnf || {});
