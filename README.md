@@ -29,7 +29,7 @@ Integrates Google Analytics with social media events on your pages.
 * no configuration is necessary for default settings.
 * LinkedIn: special case. Please add 
 data-onsuccess="_gaiLinkedInSuccessfulShare"
-attribute into the <script type="IN/Share"…> tag if you want to track LinkedIn. 
+attribute into the `<script type="IN/Share"…>` tag if you want to track LinkedIn. 
 * All others work automatically!
 
 ## Default settings
@@ -53,7 +53,7 @@ Initially page scroll event point is set by according to one of these criteria b
 
 
 ## Overriding default settings
-You need to define _gaicnf object in <script> tags before loading the gai.js (and after or before jQuery). There’s a full sample of _gaicnf structure is:
+You need to define `_gaicnf` object in `<script>` tags before loading the gai.js (and after or before jQuery). There’s a full sample of `_gaicnf` structure is:
 
 ```javascript
 var _gaicnf =  {
