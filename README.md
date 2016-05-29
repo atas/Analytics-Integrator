@@ -3,7 +3,7 @@ Analytics-Integrator
 
 Integrates Google Analytics with social media events on your pages.
 
-Latest version is [gai-0.3.js](gai-0.3.js) and [gai-0.3.min.js](gai-0.3.min.js)
+Latest version .js file: [gai-0.3.js](gai-0.3.js) and minified [gai-0.3.min.js](gai-0.3.min.js)
 
 
 ## Full Features:
